@@ -1,18 +1,22 @@
 #include <Arduino.h>
 #include <WiFi.h>
+#include <lvgl.h>
 #include <ESP_Panel_Library.h>
 #include <ESP_IOExpander_Library.h>
-#include <lvgl.h>
+#include <lvgl_port_v8.h>
 #include "Libs/SerialCom/SerialCom.h"
 #include "Libs/FileManager/FileManager.h"
 #include "Libs/ExpanderWrapper/ExpanderWrapper.h"
-#include "Screens/MainScreen/MainScreen.h"
+#include "ui/ui.h"
 
 ESP_IOExpander *expander = NULL;
 
 void setup()
 {
     Serial.begin(115200);
+    Serial1.begin(115200);
+
+    xTaskCreatePinnedToCore(SendGcodeTask, "SendGcodeTask", 10000, NULL, 2, &GcodeSenderTaskHandler, 1);
 
     ExpenderInit(expander);
 
@@ -22,11 +26,11 @@ void setup()
 
     lvgl_port_init(panel->getLcd(), panel->getTouch());
 
-    MainScreen();
-
     InitSD(expander);
+    ui_init();
 }
 
 void loop()
 {
+    ui_tick();
 }

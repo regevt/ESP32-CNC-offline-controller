@@ -1,25 +1,31 @@
 
-#include <SD.h>
-
-#include <Arduino.h>
+#include "SerialCom.h"
 
 File myFile;
 boolean restart = true;
+MessageBufferHandle_t messageBufferHandle = xMessageBufferCreate(1000);
+TaskHandle_t GcodeSenderTaskHandler;
 
-// void setup(){
-
-// 	Serial.begin(115200);
-// 	Serial.begin(115200);
-// }
-
-// void loop(){
-
-// 	checkSD();
-// 	while(restart){
-// 		openFileSD();
-// 		sendGcode();
-// 	}
-// }
+void SendGcodeTask(void *args)
+{
+    char command[200];
+    memset(command, 0, sizeof(command));
+    for (;;) // A Task shall never return or exit.
+    {
+        xMessageBufferReceive(messageBufferHandle, &command, sizeof(command), portMAX_DELAY);
+        if (command != "")
+        {
+            Serial.print("running task with command: ");
+            Serial.println(command);
+            String res = sendGcode(command);
+            memset(command, 0, sizeof(command));
+            Serial.print(res);
+            Serial.println("ending task");
+        }
+        vTaskDelay(1);
+    }
+    vTaskDelete(GcodeSenderTaskHandler);
+}
 
 void waitSerial()
 {
@@ -29,7 +35,7 @@ void waitSerial()
 
     while (!serialAv)
     {
-        if (Serial.available())
+        if (Serial1.available())
             serialAv = true;
     }
 }
@@ -43,9 +49,9 @@ String getSerial()
     String inLine = "";
     waitSerial();
 
-    while (Serial.available())
+    while (Serial1.available())
     {
-        inLine += (char)Serial.read();
+        inLine += (char)Serial1.read();
         delay(2);
     }
     return inLine;
@@ -53,8 +59,8 @@ String getSerial()
 
 void emptySerialBuf()
 {
-    while (Serial.available())
-        Serial.read();
+    while (Serial1.available())
+        Serial1.read();
 }
 
 void checkSD()
@@ -69,11 +75,11 @@ void checkSD()
 
     while (!SD.begin(53))
     {
-        Serial.println("Please insert SD card...\n");
+        Serial1.println("Please insert SD card...\n");
         delay(1000);
     }
 
-    Serial.println("SD card OK...\n");
+    Serial1.println("SD card OK...\n");
     delay(1000);
 }
 
@@ -83,7 +89,7 @@ void openFileSD()
     String fileName = "";
     char fileNameChar[100] = {0}; // char array for SD functions arguments
 
-    Serial.println("Enter name for a gcode file on SD : \n");
+    Serial1.println("Enter name for a gcode file on SD : \n");
     emptySerialBuf();
     fileName = getSerial();
 
@@ -92,30 +98,30 @@ void openFileSD()
 
     if (!SD.exists(fileNameChar))
     { // check if file already exists
-        Serial.print("-- ");
-        Serial.print(fileNameChar);
-        Serial.print(" doesn't exists");
-        Serial.println(" --");
-        Serial.println("Please select another file\n");
+        Serial1.print("-- ");
+        Serial1.print(fileNameChar);
+        Serial1.print(" doesn't exists");
+        Serial1.println(" --");
+        Serial1.println("Please select another file\n");
         delay(200);
         openFileSD();
     }
     else
     {
         myFile = SD.open(fileNameChar, FILE_READ); // create a new file
-        Serial.print("-- ");
-        Serial.print("File : ");
-        Serial.print(fileNameChar);
-        Serial.print(" opened!");
-        Serial.println(" --\n");
+        Serial1.print("-- ");
+        Serial1.print("File : ");
+        Serial1.print(fileNameChar);
+        Serial1.print(" opened!");
+        Serial1.println(" --\n");
     }
 }
 
 void fileError()
 {
     // For file open or read error
-    Serial.println("\n");
-    Serial.println("File Error !");
+    Serial1.println("\n");
+    Serial1.println("File Error !");
 }
 
 String readLine(File f)
@@ -135,11 +141,11 @@ String readLine(File f)
 
 String sendGcode(String command)
 {
-    Serial.print("\r\n\r\n"); // Wake up grbl
-    delay(2);
+    // Serial1.print("\r\n\r\n"); // Wake up grbl
+    // delay(2);
     emptySerialBuf();
-    Serial.print(command); // send to serials
-    return getSerial();    // get grbl return on serial
+    Serial1.println(command); // send to serials
+    return getSerial();       // get grbl return on serial
 }
 
 void sendGcode()
@@ -151,22 +157,22 @@ void sendGcode()
 
     String line = "";
 
-    Serial.print("\r\n\r\n"); // Wake up grbl
+    Serial1.print("\r\n\r\n"); // Wake up grbl
     delay(2);
     emptySerialBuf();
     if (myFile)
     {
         while (myFile.available())
-        {                              // until the file's end
-            line = readLine(myFile);   // read line in gcode file
-            Serial.print(line);        // send to serials
-            Serial.print(getSerial()); // print grbl return on serial
+        {                               // until the file's end
+            line = readLine(myFile);    // read line in gcode file
+            Serial1.print(line);        // send to serials
+            Serial1.print(getSerial()); // print grbl return on serial
         }
     }
     else
         fileError();
 
     myFile.close();
-    Serial.println("Finish!!\n");
+    Serial1.println("Finish!!\n");
     delay(2000);
 }

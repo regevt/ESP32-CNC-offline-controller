@@ -39,7 +39,7 @@
 #define LVGL_PORT_BUFFER_MALLOC_CAPS (MALLOC_CAP_INTERNAL) // Allocate LVGL buffer in SRAM
 // #define LVGL_PORT_BUFFER_MALLOC_CAPS            (MALLOC_CAP_SPIRAM)      // Allocate LVGL buffer in PSRAM
 #define LVGL_PORT_BUFFER_SIZE (LVGL_PORT_DISP_WIDTH * 20)
-#define LVGL_PORT_BUFFER_NUM (2)
+#define LVGL_PORT_BUFFER_NUM (1)
 
 /**
  * LVGL timer handle task related parameters, can be adjusted by users

@@ -1,22 +1,23 @@
-
-#include <SD.h>
+#ifndef SERIAL_COM_H
+#define SERIAL_COM_H
 
 #include <Arduino.h>
+#include <SD.h>
+#include "FreeRTOS.h"
+#include "message_buffer.h"
 
-void checkSD();
+extern MessageBufferHandle_t messageBufferHandle;
+extern TaskHandle_t GcodeSenderTaskHandler;
 
-void openFileSD();
+extern void SendGcodeTask(void *args);
+extern void checkSD();
+extern void openFileSD();
+extern void emptySerialBuf();
+extern void waitSerial();
+extern String getSerial();
+extern String sendGcode(String command);
+extern void sendGcode();
+extern void fileError();
+extern String readLine(File f);
 
-void emptySerialBuf();
-
-void waitSerial();
-
-String getSerial();
-
-String sendGcode(String command);
-
-void sendGcode();
-
-void fileError();
-
-String readLine(File f);
+#endif

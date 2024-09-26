@@ -1,3 +1,5 @@
+#ifndef FILE_MANAGER_H
+#define FILE_MANAGER_H
 
 #include <Arduino.h>
 #include <ESP_IOExpander_Library.h>
@@ -16,3 +18,5 @@ extern void appendFile(fs::FS &fs, const char *path, const char *message);
 extern void renameFile(fs::FS &fs, const char *path1, const char *path2);
 extern void deleteFile(fs::FS &fs, const char *path);
 extern void testFileIO(fs::FS &fs, const char *path);
+
+#endif
