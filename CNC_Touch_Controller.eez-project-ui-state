@@ -23,7 +23,6 @@
           },
           {
             "type": "border",
-            "selected": 2,
             "size": 240,
             "location": "right",
             "children": [
@@ -124,7 +123,6 @@
                   "type": "tabset",
                   "id": "#eb40d3a6-ce3a-4360-b86e-755f46fda797",
                   "weight": 1,
-                  "selected": 2,
                   "enableClose": false,
                   "children": [
                     {
@@ -191,6 +189,7 @@
               "type": "tabset",
               "id": "EDITORS",
               "weight": 56.82888540031397,
+              "selected": 1,
               "enableDeleteWhenEmpty": false,
               "enableClose": false,
               "children": [

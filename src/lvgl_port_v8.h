@@ -6,8 +6,8 @@
 #pragma once
 
 #include <ESP_Panel_Library.h>
+#include <lv_conf.h>
 #include <lvgl.h>
-
 // *INDENT-OFF*
 
 /**

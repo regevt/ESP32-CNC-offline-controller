@@ -54,9 +54,24 @@
     "stdexcept": "cpp",
     "streambuf": "cpp",
     "cinttypes": "cpp",
-    "typeinfo": "cpp"
+    "typeinfo": "cpp",
+    "lvgl.h": "c",
+    "fstream": "cpp",
+    "ff.h": "c"
   },
   "cSpell.words": ["Gcode"],
   "idf.adapterTargetName": "esp32s3",
-  "idf.openOcdConfigs": ["board/esp32s3-builtin.cfg"]
+  "idf.openOcdConfigs": ["board/esp32s3-builtin.cfg"],
+  "C_Cpp.errorSquiggles": "disabled",
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/.vscode": true,
+    "**/.pio": true
+  },
+  "explorerExclude.backup": {}
 }
