@@ -53,7 +53,7 @@ void listDir(fs::FS &fs, const char *dirname, uint8_t levels)
             Serial.print("  FILE: ");
             Serial.print(file.name());
             Serial.print("  SIZE: ");
-            Serial.println(file.size());
+            Serial.printf("%d Kb\n", file.size() / 1024);
         }
         file = root.openNextFile();
     }
