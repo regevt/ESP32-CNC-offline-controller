@@ -1,6 +1,0 @@
-#pragma once
-
-#define WIFI_SSID "SSID"
-#define WIFI_PASSWORD "PASSWORD"
-#define FLUIDNC_IP "IP_ADDRESS"
-#define FLUIDNC_WEBSOCKET_PORT 81

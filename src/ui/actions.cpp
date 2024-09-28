@@ -10,6 +10,8 @@ void action_x_right_clicked(lv_event_t *e)
     {
         // listDir(SD, "/", 0);
 
-        readFile(SD, "/Nnyy50x50.nc");
+        // readFile(SD, "/Nnyy50x50.nc");
+
+        ESP.restart();
     }
 }

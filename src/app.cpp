@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <WiFi.h>
+#include <WebServer.h>
 #include <lvgl.h>
 #include <ESP_Panel_Library.h>
 #include <ESP_IOExpander_Library.h>
@@ -7,6 +8,7 @@
 #include "Libs/SerialCom/SerialCom.h"
 #include "Libs/FileManager/FileManager.h"
 #include "Libs/ExpanderWrapper/ExpanderWrapper.h"
+#include "Libs/WebsiteService/WebsiteService.h"
 #include "ui/ui.h"
 
 ESP_IOExpander *expander = NULL;
@@ -28,9 +30,12 @@ void setup()
 
     InitSD(expander);
     ui_init();
+
+    WebsiteServiceInit();
 }
 
 void loop()
 {
     ui_tick();
+    server.handleClient();
 }
